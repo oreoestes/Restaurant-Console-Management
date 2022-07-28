@@ -1,0 +1,48 @@
+CREATE TABLE Restaurants(
+	StoreID SERIAL PRIMARY KEY,
+	Location varchar(255) UNIQUE NOT null,
+	StartTime time NOT null,
+	EndTime time NOT null
+);
+
+CREATE TABLE Employees(
+	EmployeeID SERIAL PRIMARY KEY,
+	Name varchar(255) NOT null,
+	Salary float8 NOT null,
+	DateOfBirth date NOT null,
+	StoreID int REFERENCES Restaurants ON DELETE CASCADE
+);
+
+CREATE TABLE Managers(
+	EmployeeID int PRIMARY KEY REFERENCES Employees ON DELETE CASCADE,
+	Promoted date
+);
+
+CREATE TABLE Profits(
+	StoreID int REFERENCES Restaurants ON DELETE SET null,
+	RecordedOn date NOT null,
+	Upkeep float8 NOT null,
+	Sales float8 NOT null,
+	PRIMARY KEY(StoreID, Month)
+);
+
+
+CREATE TABLE Suppliers(
+	SupplierID SERIAL PRIMARY KEY,
+	Name varchar(255) NOT null
+);
+
+CREATE TABLE Orders(
+	ItemName varchar(255) NOT null,
+	StoreID int REFERENCES Restaurants ON DELETE SET null,
+	Supplier int REFERENCES Suppliers ON DELETE SET null,
+	Cost float8 NOT null,
+	OrderedBy int REFERENCES Managers ON DELETE SET null,
+	Date date NOT null
+);
+
+CREATE TABLE Accounts(
+	EmployeeID int REFERENCES Employees ON DELETE CASCADE,
+	Username varchar(255),
+	Password varchar(255)
+);
